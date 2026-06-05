@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated": "Fri, 5 Jun 2026 · 16:45 WIB",
+    "updated": "Fri, 6 Jun 2026 · 09:00 WIB",
     "marketStatus": {
       "label": "IDX Closed",
       "tone": "neg"
@@ -9,272 +9,233 @@
   "tickers": [
     {
       "lbl": "JCI (IHSG)",
-      "val": "5,594",
-      "chg": -4.2
+      "val": "5,839",
+      "chg": -1.7
     },
     {
       "lbl": "IDR/USD",
-      "val": "18,036",
-      "chg": -0.45
+      "val": "18,020",
+      "chg": 0.05
     },
     {
       "lbl": "BI Rate",
       "val": "5.25%",
       "chg": 0.5,
-      "note": "Hiked 50bps May 2026"
+      "note": "Hiked May 2026"
     },
     {
       "lbl": "Govt Bond 10Y",
-      "val": "6.74%",
-      "chg": 0.03
+      "val": "6.71%",
+      "chg": -0.01
     },
     {
       "lbl": "Coal",
-      "val": "$147",
-      "chg": 0.85
+      "val": "$146",
+      "chg": 3.5
     },
     {
       "lbl": "Nickel",
-      "val": "$18,250",
-      "chg": 1.4
+      "val": "$18,500",
+      "chg": 2.8
     },
     {
       "lbl": "CPO",
-      "val": "4,210",
-      "chg": 0.6
+      "val": "3,650",
+      "chg": -1.2
     }
   ],
   "heroes": [
     {
       "type": "uncertainty",
-      "score": 82,
+      "score": 85,
       "level": "High",
-      "note": "JCI plunged 4.2%, rupiah near record-low Rp18,036, foreign net sell Rp3.7T in a single session, MSCI downgrade risk pending June review, and inverted bond yield curve compound severe market stress.",
+      "note": "Foreign outflows accelerating, rupiah at record lows, fiscal concerns trigger rating downgrade worries, MSCI-related selling pressure.",
       "color": "var(--amber)"
     },
     {
       "type": "outlook",
-      "stance": "Strongly Bearish",
+      "stance": "Bearish",
       "tone": "neg",
-      "duration": "2-4 weeks",
-      "note": "Persistent foreign outflows (YTD net sell Rp54T), rupiah at historic lows, MSCI classification risk on 23 Jun, and BI's surprise 50bps hike in May signal ongoing deleveraging pressure on equities and bonds."
+      "duration": "2-3 months",
+      "note": "Market worst globally YTD (-34%), foreign investor exodus broadening, geopolitical risks sustaining capital flight through mid-2026."
     },
     {
       "type": "flow",
-      "net3d": "-Rp 8.5T",
-      "ytd": "-Rp 53.97T",
-      "topSells": "BBCA · BREN · BMRI"
+      "net3d": "-Rp 3.5T",
+      "ytd": "-Rp 18.2T",
+      "topSells": "BBCA · TLKM · BMRI"
     }
   ],
   "commodities": [
     {
       "name": "Coal (Newcastle)",
-      "sub": "→ ADRO, PTBA, ITMG, BUMI",
-      "price": "$147",
+      "sub": "→ ADRO, PTBA, ITMG",
+      "price": "$146",
       "unit": "/ton",
-      "chg": 0.85
+      "chg": 3.5
     },
     {
-      "name": "Nickel (LME)",
-      "sub": "→ INCO, MDKA, ANTM",
-      "price": "$18,250",
+      "name": "Nickel",
+      "sub": "→ INCO, TINS",
+      "price": "$18,500",
       "unit": "/ton",
-      "chg": 1.4
+      "chg": 2.8
     },
     {
-      "name": "CPO (BMD)",
-      "sub": "→ AALI, LSIP, SIMP, SSMS",
-      "price": "MYR 4,210",
-      "unit": "/ton",
-      "chg": 0.6
+      "name": "CPO",
+      "sub": "→ AALI, GZCO, LSIP",
+      "price": "3,650",
+      "unit": "IDR/kg",
+      "chg": -1.2
     },
     {
-      "name": "Rubber (SICOM TSR20)",
-      "sub": "→ GJTL, ASSA, BRAM",
-      "price": "$1.68",
-      "unit": "/kg",
-      "chg": -0.6
+      "name": "Rubber",
+      "sub": "→ BMSR, GDYR",
+      "price": "156",
+      "unit": "USD/ton",
+      "chg": 0.9
     },
     {
-      "name": "Gold (Spot)",
-      "sub": "→ MDKA, ANTM, BRMS",
-      "price": "$4,558",
-      "unit": "/oz",
+      "name": "Gold",
+      "sub": "→ ANTM, MDKA",
+      "price": "2,395",
+      "unit": "USD/oz",
       "chg": 1.15
     }
   ],
   "sectors": [
     {
       "name": "Mining",
-      "chg": -1.8
+      "chg": -8.5
     },
     {
       "name": "Infrastructure",
-      "chg": -4.9
+      "chg": -3.9
     },
     {
       "name": "Energy",
-      "chg": -2.3
+      "chg": 2.3
     },
     {
       "name": "Telco",
-      "chg": -3.5
+      "chg": -2.4
     },
     {
       "name": "Banking",
-      "chg": -5.2
+      "chg": -3.1
     },
     {
       "name": "Plantation",
-      "chg": -1.1
+      "chg": -2.8
     },
     {
       "name": "Consumer",
-      "chg": -3.8
+      "chg": -4.2
     }
   ],
   "news": [
     {
-      "title": "JCI Crashes 4.2% to 5,594 — Worst Single-Day Drop in Months as Foreign Selling Hits Rp3.72T",
+      "title": "Indonesia stocks tumble to worst year globally; forex reserves fall to 2-yr low amid rupiah crisis",
       "sentiment": "neg",
-      "source": "Tempo",
+      "source": "Bloomberg",
       "cred": 4,
-      "time": "3h ago",
-      "sector": "Broad Market",
-      "impact": "Systemic de-risking by foreign investors across large-caps accelerates near-term downside, with BBCA -6.45% and BREN -10.25% signalling contagion risk to index heavyweights over the next 1-2 weeks."
+      "time": "10h ago",
+      "sector": "General",
+      "impact": "Global confidence collapse deepening; $2B BI intervention in April signals mounting external pressure; rating agencies monitoring fiscal resilience through mid-2026."
     },
     {
-      "title": "Rupiah Weakens to Rp18,036/USD — Near All-Time Low; BI Intervenes",
-      "sentiment": "neg",
-      "source": "Trading Economics / Bisnis",
+      "title": "BI Rate hiked to 5.25% in May to defend rupiah; inflation concerns linger despite 3.08% May CPI rise",
+      "sentiment": "neu",
+      "source": "Bank Indonesia",
       "cred": 4,
-      "time": "4h ago",
-      "sector": "FX / Macro",
-      "impact": "Currency at historic low boosts imported-inflation risks and tightens financial conditions, pressuring rate-sensitive sectors Banking and Property over the next 3-4 weeks."
+      "time": "18d ago",
+      "sector": "Monetary",
+      "impact": "50bp surprise hike aims to attract portfolio inflows and stabilize currency; rupiah pressure expected to persist through June before seasonal improvement in July–Aug."
     },
     {
-      "title": "MSCI Annual Market Classification Review Due 23 June — Indonesia Downgrade Risk Still Live",
+      "title": "Parliament passes sweeping commodities legislation; government tightens grip on mining sector management",
       "sentiment": "neg",
-      "source": "IDNFinancials",
-      "cred": 3,
-      "time": "1d ago",
-      "sector": "Broad Market",
-      "impact": "A potential demotion from Emerging Market status would trigger forced index-fund selling of Indonesian equities estimated in the billions of dollars, representing the single largest structural risk to IDX through end-June."
-    },
-    {
-      "title": "Indonesia Parliament Passes New Commodity Export Oversight Legislation — Tightens State Control",
-      "sentiment": "neg",
-      "source": "Reuters / Investing.com",
+      "source": "Antara",
       "cred": 4,
       "time": "2d ago",
-      "sector": "Mining / Energy / Plantation",
-      "impact": "Heightened state intervention in commodity exports raises cost-of-compliance and regulatory risk for miners and planters, likely weighing on ADRO, PTBA, AALI, and LSIP valuations for 1-3 months."
+      "sector": "Mining",
+      "impact": "Increased state intervention fears; potential export controls and pricing curbs may deter foreign investment and weigh on sector valuations through 2H 2026."
     },
     {
-      "title": "OECD Cuts Indonesia 2026 GDP Forecast to 4.7% from 4.8%",
+      "title": "FTSE Russell removes eight Indonesian stocks from indices; MSCI downgrade speculation grows",
       "sentiment": "neg",
-      "source": "Tempo / OECD",
+      "source": "Bisnis",
       "cred": 4,
-      "time": "6h ago",
+      "time": "5d ago",
+      "sector": "General",
+      "impact": "Passive fund outflows accelerating; potential MSCI downgrade would trigger cascading foreign sales estimated at USD 5–8B; investor sentiment near cyclical lows."
+    },
+    {
+      "title": "Trade surplus collapses to $0.09B in April; oil import surge underscores external vulnerability",
+      "sentiment": "neg",
+      "source": "BPS Indonesia",
+      "cred": 4,
+      "time": "6d ago",
+      "sector": "Trade",
+      "impact": "Fiscal and balance-of-payments risks intensifying; narrowing surplus with soaring energy costs signals weaker external resilience; concerns over further rupiah depreciation near-term."
+    },
+    {
+      "title": "May inflation at 3.08% YoY highest in West Papua; food price pressures resurface amid seasonal demand",
+      "sentiment": "neg",
+      "source": "Kontan",
+      "cred": 4,
+      "time": "5d ago",
       "sector": "Macro",
-      "impact": "Downward growth revision adds to bearish sentiment and could prompt further portfolio outflows from EM-dedicated funds, compounding pressure on IDR and equities near-term."
-    },
-    {
-      "title": "Danantara Sovereign Wealth Fund Rated Baa2/BBB by Moody's, S&P, Fitch — Moody's Outlook Negative",
-      "sentiment": "neu",
-      "source": "Gotrade / Katadata",
-      "cred": 3,
-      "time": "2d ago",
-      "sector": "Banking / SOEs",
-      "impact": "Negative outlook from Moody's signals market concern about fiscal trajectory; however, successful bond issuance at sovereign-parity rating provides some liquidity buffer for state-linked entities over 3-6 months."
-    },
-    {
-      "title": "Bank Indonesia Warns Oil Above $100 Has Double-Edged Impact — Export Commodity Boost vs. Inflation Risk",
-      "sentiment": "neu",
-      "source": "Jakarta Globe",
-      "cred": 4,
-      "time": "1d ago",
-      "sector": "Energy / Macro",
-      "impact": "Rising coal, CPO, and gold export revenues partially offset external balance deterioration, but elevated oil import costs keep the trade surplus thin and inflation risks elevated over the next 1-2 months."
+      "impact": "Inflation creeping above target midpoint; imported inflation via weaker rupiah poses risk to 2.5% ±1% target through 2H 2026; BI likely to hold or hike further if energy prices remain elevated."
     }
   ],
   "regulations": [
     {
-      "title": "New Commodity Export Oversight Law",
-      "sub": "Passed parliament · 2 Jun 2026",
+      "title": "Mining Bill",
+      "sub": "Passed parliament · 4 June 2026",
       "status": "Enacted",
-      "tone": "neg",
-      "sector": "Mining · Plantation · Energy",
-      "dot": "var(--red)"
+      "tone": "warn",
+      "sector": "Mining",
+      "dot": "var(--amber)"
     },
     {
-      "title": "PP 19/2026 — Danantara Expanded Authority",
-      "sub": "Signed by President Prabowo · 8 Apr 2026",
-      "status": "In Force",
-      "tone": "neu",
-      "sector": "SOEs · Banking",
-      "dot": "var(--text-faint)"
-    },
-    {
-      "title": "Bond Stabilisation Fund — Government Initiative",
-      "sub": "Announced May 2026 · Implementation pending",
-      "status": "Pending",
-      "tone": "pos",
-      "sector": "Fixed Income",
-      "dot": "var(--green)"
-    },
-    {
-      "title": "BI Regulation on SRBI (Rupiah Securities) Optimization",
-      "sub": "Ongoing tightening · Q2 2026",
+      "title": "BI FX Purchase Threshold Lowered",
+      "sub": "USD 25,000 per person/month limit · Effective June 2026",
       "status": "Active",
       "tone": "neu",
-      "sector": "FX / Banking",
+      "sector": "Forex",
       "dot": "var(--text-faint)"
     },
     {
-      "title": "High Shareholding Concentration (HSC) Disclosure Framework — IDX/OJK",
-      "sub": "Implemented ahead of MSCI deadline · Apr 2026",
-      "status": "Enacted",
+      "title": "Bond Stabilisation Fund",
+      "sub": "Government launched · May 2026",
+      "status": "Launched",
       "tone": "pos",
-      "sector": "Broad Market / Governance",
+      "sector": "Debt",
       "dot": "var(--green)"
     }
   ],
   "calendar": [
     {
-      "event": "MSCI Global Market Accessibility Review",
-      "detail": "Indonesia EM status assessment published",
-      "date": "18 Jun",
-      "days": 13,
+      "event": "Bank Indonesia Rate Meeting",
+      "detail": "Monetary policy decision",
+      "date": "19 Jun",
+      "days": 14,
       "tone": "warn"
     },
     {
-      "event": "MSCI Annual Market Classification Review",
-      "detail": "Indonesia EM vs. Frontier determination",
-      "date": "23 Jun",
-      "days": 18,
+      "event": "US CPI Release",
+      "detail": "May inflation data",
+      "date": "12 Jun",
+      "days": 7,
       "tone": "warn"
     },
     {
-      "event": "Bank Indonesia Board of Governors Meeting",
-      "detail": "BI-Rate decision — hold or further hike",
-      "date": "18 Jun",
-      "days": 13,
+      "event": "BPS Trade Balance",
+      "detail": "May 2026 release",
+      "date": "15 Jun",
+      "days": 10,
       "tone": "warn"
-    },
-    {
-      "event": "US Federal Reserve FOMC Meeting",
-      "detail": "Fed rate decision — rates expected on hold",
-      "date": "17 Jun",
-      "days": 12,
-      "tone": "warn"
-    },
-    {
-      "event": "BPS — Indonesia May 2026 Trade Balance Release",
-      "detail": "Export/import data; trade surplus expected to remain thin",
-      "date": "16 Jun",
-      "days": 11,
-      "tone": "neu"
     }
   ],
   "ratings": [
@@ -282,44 +243,44 @@
       "agency": "S&P",
       "grade": "BBB",
       "outlook": "Stable",
-      "action": "Affirmed 2026",
+      "action": "Affirmed Feb 2026",
       "tone": "neu"
     },
     {
       "agency": "Moody's",
       "grade": "Baa2",
-      "outlook": "Negative",
-      "action": "Outlook revised Negative 2026",
-      "tone": "neg"
+      "outlook": "Under Review",
+      "action": "Outlook revised Feb 2026",
+      "tone": "warn"
     },
     {
       "agency": "Fitch",
       "grade": "BBB",
       "outlook": "Negative",
-      "action": "Outlook revised Negative early 2026",
-      "tone": "neg"
+      "action": "Outlook revised Jan 2026",
+      "tone": "warn"
     }
   ],
   "precedents": [
     {
-      "html": "In <strong>May–June 2013</strong>, the 'Taper Tantrum' sent the JCI down <strong>~20%</strong> in weeks as foreign bond outflows exceeded <strong>Rp30T</strong> and the rupiah fell past <strong>Rp10,000/USD</strong> — BI ultimately hiked <strong>175bps</strong> to stabilise the currency, an analogy to today's BI emergency hike cycle."
+      "html": "In <strong>2013</strong>, similar rupiah depreciation pressures and capital outflows triggered a <strong>16%</strong> currency decline over <strong>6 months</strong>; BI intervention and eventual policy tightening arrested declines by end-2013."
     },
     {
-      "html": "During the <strong>2015 China slowdown</strong> shock, the JCI fell from <strong>5,500 to 4,100</strong> (–25%) over six months as commodity prices collapsed and the rupiah weakened to <strong>Rp14,700/USD</strong>; recovery required a <strong>12-month</strong> fiscal consolidation effort before foreign flows returned."
+      "html": "The <strong>2018 emerging-market selloff</strong> saw Indonesia's market fall <strong>~22%</strong> YTD before stabilizing; rupiah then recovered <strong>8–10%</strong> once Fed signaled rate-cut pause and BI tightened policy."
     },
     {
-      "html": "In <strong>March 2020</strong>, the JCI crashed <strong>37%</strong> to <strong>3,937</strong> and the rupiah hit <strong>Rp16,600/USD</strong> during COVID-19; however, coordinated BI bond-buying of <strong>Rp600T+</strong> and global Fed easing drove a full recovery within <strong>12 months</strong>, suggesting policy firepower remains a key circuit-breaker."
+      "html": "<strong>1997–98 Asian Financial Crisis</strong> saw Indonesian equities collapse <strong>>70%</strong> and rupiah plunge <strong>78%</strong>; recovery took <strong>18+ months</strong> and required IMF support, structural reforms, and global liquidity relief."
     }
   ],
   "geo": [
     {
-      "html": "US–Iran conflict near-closure of the Strait of Hormuz drives Brent crude above <strong>$95/bbl</strong>, inflating Indonesia's oil import bill and narrowing the trade surplus → pressuring the current account → weakening the rupiah → forcing BI rate hikes → compressing equity multiples. <span style='color:red'>Now: Trade surplus collapsed to <strong>$0.09B</strong> in April; rupiah at record-low <strong>Rp18,036</strong>.</span>"
+      "html": "Middle East conflict → elevated oil prices → energy import bill surge → trade deficit narrowing → external reserve pressure. Now: Brent near $97/bbl; May trade surplus collapsed to $0.09B vs. historical avg. of $1.5–2B."
     },
     {
-      "html": "China energy-security scramble post-Hormuz disruption drives thermal coal imports up <strong>27% YoY</strong> → Newcastle coal surges to <strong>$147/ton</strong> (+40% YoY) → revenue windfall for ADRO, ITMG, PTBA → partial offset to IDX Mining vs. broad-market selloff. <span style='color:orange'>Now: Coal sector outperforming broader index but new export-oversight law introduces regulatory overhang.</span>"
+      "html": "US monetary tightness + Fed rate expectations → USD strengthening → emerging-market capital flight → Indonesia down <strong>-34% YTD</strong> (worst among 90+ global indices); foreign sell-offs mount. Now: DXY near 99.4; BI forex reserves hit 2-yr low of $146.2B in April."
     },
     {
-      "html": "US Fed maintaining elevated rates → strong USD → capital flight from EM Asia → Indonesia bears disproportionate pressure as MSCI downgrade risk amplifies forced selling by passive global funds → YTD foreign equity outflows reach <strong>Rp53.97T</strong>, the largest since the 2018 EM crisis. <span style='color:red'>Now: MSCI classification verdict due <strong>23 Jun</strong>; outcome is binary and high-stakes for the entire IDX.</span>"
+      "html": "China growth moderation + global trade slowdown → weaker commodity demand → nickel & coal volatility → IDX mining sector down <strong>-8.5%</strong> Thu; manufacturing PMI resilient at 50 but export orders soft. Now: Coal up +3.5% on China supply shock; Indonesia export growth still lagging."
     }
   ]
 }
