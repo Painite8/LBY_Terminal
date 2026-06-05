@@ -18,7 +18,7 @@ import json
 import datetime
 import anthropic
 
-MODEL = "claude-sonnet-4.6"  # fastest + cheapest; supports web search
+MODEL = "claude-sonnet-4-6"  # fastest + cheapest; supports web search
 DATA_FILE = "data.json"
 
 # ---- The JSON shape the dashboard expects. We give this to Claude verbatim. ----
