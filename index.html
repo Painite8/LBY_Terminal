@@ -127,80 +127,7 @@
   <div class="footer">LBY Terminal · simulated (mock) data for development · auto-updated daily via GitHub Actions</div>
 </div>
 <script>
-/* =========================================================================
-   DATA SOURCE
-   -------------------------------------------------------------------------
-   For now this is mock data baked into the file. Later, your GitHub Action
-   will write a real data.json. To switch over, replace the DATA const below
-   with:
-       const DATA = await (await fetch('data.json?t=' + Date.now())).json();
-   and wrap render() in an async function. Nothing else changes.
-   ========================================================================= */
-const DATA = {
-  meta: { updated: "Fri, 6 Jun 2025 · 14:23 WIB", marketStatus: { label: "IDX Closed", tone: "neg" } },
-  tickers: [
-    { lbl: "JCI (IHSG)", val: "7,234", chg: -0.82 },
-    { lbl: "IDR/USD", val: "15,890", chg: -0.31 },
-    { lbl: "BI Rate", val: "6.25%", chg: 0, note: "Hold" },
-    { lbl: "Govt Bond 10Y", val: "6.78%", chg: 0.04 },
-    { lbl: "Coal", val: "$127", chg: 1.2 },
-    { lbl: "Nickel", val: "$16,450", chg: 2.1 },
-    { lbl: "CPO", val: "3,890", chg: -0.5 },
-  ],
-  heroes: [
-    { type: "uncertainty", score: 67, level: "High", color: "var(--amber)",
-      note: "Driven by: foreign outflows, IMF downgrade, IDR pressure. Offsetting: Mining Bill, China demand." },
-    { type: "outlook", stance: "Cautiously Bearish", tone: "neg", duration: "2–3 weeks",
-      note: "Near-term pressure from foreign outflows & a weakening rupiah. Reversal catalysts: BI rate meeting, BPS inflation data." },
-    { type: "flow", net3d: "−Rp 2.3T", ytd: "−Rp 8.1T", topSells: "BBCA · TLKM · BMRI" }
-  ],
-  commodities: [
-    { name: "Coal (Newcastle)", sub: "→ ADRO, PTBA, ITMG", price: "$127", unit: "/ton", chg: 1.2 },
-    { name: "Nickel (LME)", sub: "→ INCO, ANTM", price: "$16,450", unit: "/ton", chg: 2.1 },
-    { name: "Palm Oil (CPO)", sub: "→ AALI, LSIP, SIMP", price: "RM 3,890", unit: "/ton", chg: -0.5 },
-    { name: "Rubber (TOCOM)", sub: "→ plantation sector", price: "¥318", unit: "/kg", chg: 0.7 },
-    { name: "Gold", sub: "→ MDKA, ANTM", price: "$2,340", unit: "/oz", chg: 0.3 },
-  ],
-  sectors: [
-    { name: "Mining", chg: 2.1 }, { name: "Infrastructure", chg: 1.5 }, { name: "Energy", chg: 0.9 },
-    { name: "Telco", chg: 0.3 }, { name: "Banking", chg: -0.5 }, { name: "Plantation", chg: -0.8 }, { name: "Consumer", chg: -1.2 },
-  ],
-  news: [
-    { title: "Parliament passes new Mining Bill — positive for coal & metals", sentiment: "pos", source: "Kontan", cred: 4, time: "2h ago", sector: "Mining", impact: "Positive outlook ~3–6 weeks for ADRO, PTBA, ITMG." },
-    { title: "Foreign investors net sell Rp 2.3T over three straight days", sentiment: "neg", source: "Bisnis.com", cred: 4, time: "4h ago", sector: "Capital Flow", impact: "Short-term weakness signal. Watch the rupiah closely." },
-    { title: "Presidential Reg. 32/2025 on nickel downstreaming signed", sentiment: "pos", source: "Antara", cred: 4, time: "1d ago", sector: "Regulation", impact: "Positive for INCO, ANTM. Outlook ~4–8 weeks." },
-    { title: "IMF cuts Indonesia growth forecast to 4.8% — below budget target", sentiment: "neg", source: "Reuters", cred: 4, time: "6h ago", sector: "Macro", impact: "Pressure on bond yields & sovereign rating outlook." },
-    { title: "China lifts commodity demand — Indonesian exports benefit", sentiment: "pos", source: "Bloomberg", cred: 4, time: "8h ago", sector: "Geopolitics", impact: "Positive for coal & nickel ~2–4 weeks." },
-    { title: "Market blog: 'JCI will break 8000 next week'", sentiment: "neu", source: "Anonymous blog", cred: 1, time: "10h ago", sector: "Speculation", impact: "Low credibility — minimal weight in the sentiment score." },
-  ],
-  regulations: [
-    { title: "Mining Bill (RUU Minerba)", sub: "Passed parliament · 2 days ago", status: "Enacted", tone: "pos", sector: "Mining", dot: "var(--green)" },
-    { title: "Pres. Reg. 32/2025 Nickel Downstreaming", sub: "Signed by President · 1 week ago", status: "In force", tone: "pos", sector: "Industry", dot: "var(--green)" },
-    { title: "Capital City (IKN) Amendment Bill", sub: "Committee stage · pending", status: "In progress", tone: "warn", sector: "Property", dot: "var(--amber)" },
-    { title: "National EV Incentive Reg.", sub: "Early draft · est. Q3 2025", status: "Draft", tone: "neu", sector: "Automotive", dot: "var(--text-faint)" },
-  ],
-  calendar: [
-    { event: "Bank Indonesia Rate Meeting", detail: "Interest rate decision", date: "19 Jun", days: 13, tone: "warn" },
-    { event: "US Fed (FOMC)", detail: "Direct impact on IDR & bonds", date: "18 Jun", days: 12, tone: "neg" },
-    { event: "BPS Inflation Data", detail: "May 2025 inflation", date: "3 Jun", days: 0, tone: "neu", done: true },
-    { event: "BPS Trade Balance", detail: "April exports / imports", date: "1 Jul", days: 25, tone: "neu" },
-  ],
-  ratings: [
-    { agency: "S&P", grade: "BBB", outlook: "Stable", action: "Affirmed Apr 2025", tone: "neu" },
-    { agency: "Moody's", grade: "Baa2", outlook: "Stable", action: "Affirmed Feb 2025", tone: "neu" },
-    { agency: "Fitch", grade: "BBB", outlook: "Stable", action: "Watching — IMF revision", tone: "warn" },
-  ],
-  precedents: [
-    { html: "When the <strong>Omnibus Law</strong> passed (2020), JCI mining stocks rose <strong>~6%</strong> within 4 weeks." },
-    { html: "The <strong>2020</strong> nickel export ban first hit ANTM <strong>−4%</strong>, then rebounded <strong>+18%</strong> over 3 months as downstreaming kicked in." },
-    { html: "Foreign outflows > Rp 2T over 3 days have historically been followed by a JCI dip of <strong>~1–3%</strong> over the next 1–2 weeks." },
-  ],
-  geo: [
-    { html: "<strong>US–China tension →</strong> China commodity demand → Indonesian exports → IDX Mining. <span style='color:var(--green)'>Now: demand rising (positive).</span>" },
-    { html: "<strong>Global oil prices →</strong> fuel subsidies & inflation → BI's room to move. <span style='color:var(--amber)'>Now: neutral.</span>" },
-    { html: "<strong>Fed policy →</strong> rate differential → capital flows → IDR. <span style='color:var(--red)'>Now: pressure (negative).</span>" },
-  ]
-};
+let DATA = {};
 
 const chgClass = c => c > 0 ? 'up' : c < 0 ? 'dn' : 'flat';
 const chgStr = (c, note) => { if (c === 0) return note ? '— ' + note : '— 0.00%'; const a = c > 0 ? '▲' : '▼'; return a + ' ' + Math.abs(c).toFixed(2) + '%'; };
@@ -229,7 +156,19 @@ function render() {
   document.getElementById('precedents').innerHTML = DATA.precedents.map(p => `<div class="quote">${p.html}</div>`).join('');
   document.getElementById('geo').innerHTML = DATA.geo.map(g => `<div class="quote">${g.html}</div>`).join('');
 }
-render();
+async function load() {
+  try {
+    const res = await fetch('data.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    DATA = await res.json();
+    render();
+  } catch (e) {
+    document.querySelector('.wrap').insertAdjacentHTML('beforeend',
+      '<div class="footer" style="color:var(--red)">Could not load data.json — ' + e.message +
+      '. If you just deployed, wait a minute and refresh.</div>');
+  }
+}
+load();
 </script>
 </body>
 </html>
