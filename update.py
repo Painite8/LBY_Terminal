@@ -16,10 +16,25 @@ import re
 import sys
 import json
 import datetime
+import urllib.request
 import anthropic
 
-MODEL = "claude-sonnet-4-6"  # fastest + cheapest; supports web search
+# Sonnet for the analysis (more reliable than Haiku on this task). Now that
+# exact prices come from the Stooq feed below, Claude does less number-work,
+# so you can experiment with "claude-haiku-4-5-20251001" again to cut cost.
+MODEL = "claude-sonnet-4-6"
 DATA_FILE = "data.json"
+
+# ---- Free price feed (Stooq: no API key, automation-friendly) ----------------
+# Maps the dashboard's ticker label -> (Stooq symbol, how to format the value).
+# Only the tickers listed here get overwritten with real data; the rest stay as
+# Claude produced them. If a symbol is wrong or the fetch fails, we keep Claude's
+# value rather than break the dashboard.
+PRICE_FEED = {
+    "JCI (IHSG)": ("^jkse",   "comma"),    # Jakarta Composite Index
+    "IDR/USD":    ("usdidr",  "comma"),    # rupiah per US dollar
+    "Gold":       ("xauusd",  "dollar0"),  # gold, USD/oz
+}
 
 # ---- The JSON shape the dashboard expects. We give this to Claude verbatim. ----
 SCHEMA_EXAMPLE = {
@@ -144,6 +159,50 @@ REQUIRED_KEYS = ["meta", "tickers", "heroes", "commodities", "sectors",
                  "news", "regulations", "calendar", "ratings", "precedents", "geo"]
 
 
+def parse_stooq_csv(text):
+    """Stooq daily CSV -> (last_close, pct_change). Header: Date,Open,High,Low,Close,Volume."""
+    rows = [r for r in text.strip().splitlines() if r and "," in r]
+    if len(rows) < 3:
+        raise ValueError("not enough rows")
+    last, prev = rows[-1].split(","), rows[-2].split(",")
+    close, pclose = float(last[4]), float(prev[4])
+    if pclose == 0:
+        raise ValueError("zero previous close")
+    return close, round((close - pclose) / pclose * 100, 2)
+
+
+def format_value(num, style):
+    """Format a raw price the way the dashboard ticker expects."""
+    if style == "comma":
+        return f"{round(num):,}"
+    if style == "dollar0":
+        return f"${round(num):,}"
+    return str(round(num, 2))
+
+
+def fetch_price(symbol):
+    url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return parse_stooq_csv(r.read().decode("utf-8", "replace"))
+
+
+def apply_price_feed(data):
+    """Overwrite matching tickers with real Stooq data. Never raises; logs and skips on failure."""
+    by_label = {t.get("lbl"): t for t in data.get("tickers", [])}
+    for label, (symbol, style) in PRICE_FEED.items():
+        t = by_label.get(label)
+        if not t:
+            continue
+        try:
+            close, chg = fetch_price(symbol)
+            t["val"], t["chg"] = format_value(close, style), chg
+            print(f"  feed: {label} -> {t['val']} ({chg:+.2f}%)")
+        except Exception as e:
+            print(f"  feed: {label} failed ({e}); keeping Claude's value", file=sys.stderr)
+    return data
+
+
 def main():
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
@@ -186,6 +245,7 @@ def main():
         sys.exit(1)
 
     data = add_presentation(data)
+    data = apply_price_feed(data)   # overwrite prices with real feed data where possible
 
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
