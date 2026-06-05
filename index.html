@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal Pasar Indonesia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0D11;
+    --surface: #12171D;
+    --surface-2: #1A2129;
+    --border: #232C36;
+    --border-bright: #313D4A;
+    --text: #E6EAEF;
+    --text-dim: #8A95A3;
+    --text-faint: #5A6573;
+    --gold: #E0A82E;
+    --green: #16C784;
+    --red: #EA3943;
+    --amber: #F0A04B;
+    --blue: #4C8DFF;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Bricolage Grotesque', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 40px;
+  }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---- top bar ---- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0 14px; border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 10px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 12px; }
+  .brand h1 {
+    font-family: var(--display); font-weight: 600; font-size: 22px;
+    letter-spacing: -0.02em; color: var(--text);
+  }
+  .brand .accent { color: var(--gold); }
+  .brand .tag {
+    font-size: 10px; color: var(--text-faint); letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .clock { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-dim); }
+  .status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; }
+  .pill {
+    font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px; font-weight: 500;
+  }
+
+  /* ---- ticker strip ---- */
+  .ticker-strip {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; margin: 14px 0;
+  }
+  .tk { background: var(--surface); padding: 11px 13px; }
+  .tk .lbl { font-size: 9.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+  .tk .val { font-size: 17px; font-weight: 700; margin: 3px 0 1px; letter-spacing: -0.01em; }
+  .tk .chg { font-size: 11px; font-weight: 500; }
+
+  /* ---- grid ---- */
+  .grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 12px; align-items: start; }
+  .col { display: flex; flex-direction: column; gap: 12px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 15px 16px;
+  }
+  .card-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); font-weight: 500;
+  }
+  .card-title .ic { color: var(--gold); margin-right: 6px; }
+
+  /* metric hero cards */
+  .hero-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .hero .big { font-size: 36px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+  .hero .unit { font-size: 12px; color: var(--text-dim); }
+  .meter { height: 7px; background: var(--surface-2); border-radius: 4px; overflow: hidden; margin: 10px 0 6px; }
+  .meter-fill { height: 100%; border-radius: 4px; }
+  .meter-scale { display: flex; justify-content: space-between; font-size: 9px; color: var(--text-faint); }
+
+  /* news */
+  .news-item { padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .news-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .news-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+  .news-title { font-size: 13px; font-weight: 500; line-height: 1.4; color: var(--text); }
+  .news-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .news-src { font-size: 10.5px; color: var(--text-dim); }
+  .news-impact { font-size: 11px; color: var(--text-dim); margin-top: 5px; line-height: 1.45; }
+  .cred { display: inline-flex; gap: 2px; align-items: center; }
+  .cred-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+  .cred-dot.off { background: var(--border-bright); }
+
+  /* tags */
+  .tag { font-size: 9.5px; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
+  .tag-pos { background: rgba(22,199,132,0.13); color: var(--green); }
+  .tag-neg { background: rgba(234,57,57,0.13); color: var(--red); }
+  .tag-neu { background: rgba(138,149,163,0.13); color: var(--text-dim); }
+  .tag-warn { background: rgba(240,160,75,0.13); color: var(--amber); }
+  .tag-info { background: rgba(76,141,255,0.13); color: var(--blue); }
+
+  /* sector bars */
+  .sec-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+  .sec-row:last-child { margin-bottom: 0; }
+  .sec-name { font-size: 11.5px; width: 92px; flex-shrink: 0; color: var(--text); }
+  .sec-bar { flex: 1; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; position: relative; }
+  .sec-fill { height: 100%; border-radius: 3px; }
+  .sec-val { font-size: 11px; font-weight: 500; width: 44px; text-align: right; flex-shrink: 0; }
+
+  /* commodity rows */
+  .com-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .com-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .com-name { font-size: 12.5px; font-weight: 500; }
+  .com-sub { font-size: 10px; color: var(--text-faint); }
+  .com-price { font-family: var(--mono); font-size: 13px; font-weight: 700; text-align: right; }
+  .com-chg { font-size: 11px; font-weight: 500; text-align: right; width: 56px; }
+
+  /* reg tracker */
+  .reg-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .reg-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .reg-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .reg-title { font-size: 12.5px; font-weight: 500; color: var(--text); }
+  .reg-sub { font-size: 10.5px; color: var(--text-dim); margin: 2px 0 5px; }
+
+  /* calendar */
+  .cal-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 9px 11px; background: var(--surface-2); border-radius: 7px; margin-bottom: 7px;
+  }
+  .cal-item:last-child { margin-bottom: 0; }
+  .cal-event { font-size: 12px; font-weight: 500; }
+  .cal-detail { font-size: 10px; color: var(--text-dim); }
+  .cal-date { font-size: 12px; font-weight: 500; text-align: right; }
+
+  /* ratings */
+  .rate-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .rate-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .rate-agency { font-size: 12px; font-weight: 500; }
+  .rate-grade { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--gold); }
+
+  /* foreign flow split */
+  .ff-split { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .ff-box { padding: 11px; border-radius: 8px; }
+  .ff-box .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .ff-box .num { font-family: var(--mono); font-size: 19px; font-weight: 700; }
+
+  /* precedent / geo */
+  .quote { font-size: 11.5px; line-height: 1.5; color: var(--text-dim); padding-left: 11px; border-left: 2px solid var(--border-bright); margin-bottom: 11px; }
+  .quote:last-child { margin-bottom: 0; }
+  .quote strong { color: var(--text); font-weight: 500; }
+
+  .footer { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 10.5px; color: var(--text-faint); text-align: center; }
+
+  .up { color: var(--green); }
+  .dn { color: var(--red); }
+  .flat { color: var(--text-dim); }
+
+  @media (max-width: 1080px) { .grid { grid-template-columns: 1fr 1fr; } .ticker-strip { grid-template-columns: repeat(4,1fr); } .hero-row { grid-template-columns: 1fr; } }
+  @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } .ticker-strip { grid-template-columns: repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <h1>Terminal<span class="accent">.id</span></h1>
+      <span class="tag">Intelijen Pasar Indonesia</span>
+    </div>
+    <div class="clock">
+      <span id="clock">—</span>
+      <span class="pill" id="market-status">—</span>
+    </div>
+  </div>
+
+  <div class="ticker-strip" id="tickers"></div>
+
+  <div class="hero-row" id="heroes"></div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Berita &amp; Sentimen</span><span class="card-title" id="news-count"></span></div>
+        <div id="news"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Komoditas</span></div>
+        <div id="commodities"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Heatmap Sektor IDX</span></div>
+        <div id="sectors"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Preseden Historis</span></div>
+        <div id="precedents"></div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Pelacak Regulasi</span></div>
+        <div id="regulations"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Kalender Ekonomi</span></div>
+        <div id="calendar"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Peringkat Kredit Sovereign</span></div>
+        <div id="ratings"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Filter Geopolitik</span></div>
+        <div id="geo"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Terminal.id · data simulasi (mock) untuk pengembangan · diperbarui otomatis via GitHub Actions
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   DATA SOURCE
+   -------------------------------------------------------------------------
+   For now this is mock data baked into the file. Later, your GitHub Action
+   will write a real data.json. To switch over, replace the DATA const below
+   with:
+       const DATA = await (await fetch('data.json?t=' + Date.now())).json();
+   and wrap render() in an async function. Nothing else changes.
+   ========================================================================= */
+const DATA = {
+  meta: { updated: "Jum, 6 Jun 2025 · 14:23 WIB", marketStatus: { label: "IDX Tutup", tone: "neg" } },
+
+  tickers: [
+    { lbl: "IHSG", val: "7,234", chg: -0.82 },
+    { lbl: "IDR/USD", val: "15,890", chg: -0.31 },
+    { lbl: "BI Rate", val: "6.25%", chg: 0, note: "Stabil" },
+    { lbl: "SBN 10Y", val: "6.78%", chg: 0.04 },
+    { lbl: "Batu Bara", val: "$127", chg: 1.2 },
+    { lbl: "Nikel", val: "$16,450", chg: 2.1 },
+    { lbl: "CPO", val: "3,890", chg: -0.5 },
+  ],
+
+  heroes: [
+    {
+      type: "uncertainty",
+      score: 67, level: "Tinggi", color: "var(--amber)",
+      note: "Dipicu: dana asing keluar, revisi IMF, tekanan IDR. Penyeimbang: RUU Minerba, permintaan China."
+    },
+    {
+      type: "outlook",
+      stance: "Hati-hati Bearish", tone: "neg", duration: "2–3 minggu",
+      note: "Tekanan jangka pendek dari arus keluar asing & pelemahan IDR. Katalis pembalik: RDG BI, data inflasi BPS."
+    },
+    {
+      type: "flow",
+      net3d: "−Rp 2.3T", ytd: "−Rp 8.1T",
+      topSells: "BBCA · TLKM · BMRI"
+    }
+  ],
+
+  commodities: [
+    { name: "Batu Bara (Newcastle)", sub: "→ ADRO, PTBA, ITMG", price: "$127", unit: "/ton", chg: 1.2 },
+    { name: "Nikel (LME)", sub: "→ INCO, ANTM", price: "$16,450", unit: "/ton", chg: 2.1 },
+    { name: "CPO / Minyak Sawit", sub: "→ AALI, LSIP, SIMP", price: "RM 3,890", unit: "/ton", chg: -0.5 },
+    { name: "Karet (TOCOM)", sub: "→ sektor perkebunan", price: "¥318", unit: "/kg", chg: 0.7 },
+    { name: "Emas", sub: "→ MDKA, ANTM", price: "$2,340", unit: "/oz", chg: 0.3 },
+  ],
+
+  sectors: [
+    { name: "Mining", chg: 2.1 },
+    { name: "Infrastruktur", chg: 1.5 },
+    { name: "Energi", chg: 0.9 },
+    { name: "Telco", chg: 0.3 },
+    { name: "Perbankan", chg: -0.5 },
+    { name: "Perkebunan", chg: -0.8 },
+    { name: "Konsumen", chg: -1.2 },
+  ],
+
+  news: [
+    { title: "DPR sahkan RUU Minerba — dampak positif sektor pertambangan", sentiment: "pos", source: "Kontan", cred: 4, time: "2j lalu", sector: "Mining", impact: "Outlook positif ~3–6 minggu untuk ADRO, PTBA, ITMG." },
+    { title: "Asing net sell Rp 2.3T selama 3 hari berturut-turut", sentiment: "neg", source: "Bisnis.com", cred: 4, time: "4j lalu", sector: "Aliran Dana", impact: "Sinyal pelemahan jangka pendek. Pantau pergerakan IDR." },
+    { title: "Perpres 32/2025 hilirisasi nikel resmi ditandatangani", sentiment: "pos", source: "Antara", cred: 4, time: "1h lalu", sector: "Regulasi", impact: "Positif untuk INCO, ANTM. Outlook ~4–8 minggu." },
+    { title: "IMF revisi turun proyeksi RI ke 4.8% — di bawah target APBN", sentiment: "neg", source: "Reuters", cred: 4, time: "6j lalu", sector: "Makro", impact: "Tekanan pada yield SBN & outlook rating sovereign." },
+    { title: "China naikkan permintaan komoditas — ekspor RI diuntungkan", sentiment: "pos", source: "Bloomberg", cred: 4, time: "8j lalu", sector: "Geopolitik", impact: "Positif batu bara & nikel ~2–4 minggu." },
+    { title: "Blog pasar: 'IHSG akan tembus 8000 minggu depan'", sentiment: "neu", source: "Blog anonim", cred: 1, time: "10j lalu", sector: "Spekulasi", impact: "Kredibilitas rendah — bobot kecil dalam skor sentimen." },
+  ],
+
+  regulations: [
+    { title: "RUU Minerba", sub: "Disahkan DPR · 2 hari lalu", status: "Selesai", tone: "pos", sector: "Mining", dot: "var(--green)" },
+    { title: "Perpres 32/2025 Hilirisasi Nikel", sub: "Ditandatangani Presiden · 1 minggu lalu", status: "Berlaku", tone: "pos", sector: "Industri", dot: "var(--green)" },
+    { title: "RUU Amandemen IKN", sub: "Tahap panitia DPR · belum selesai", status: "Proses", tone: "warn", sector: "Properti", dot: "var(--amber)" },
+    { title: "PP Insentif EV Nasional", sub: "Draft awal · estimasi Q3 2025", status: "Draft", tone: "neu", sector: "Otomotif", dot: "var(--text-faint)" },
+  ],
+
+  calendar: [
+    { event: "RDG Bank Indonesia", detail: "Keputusan suku bunga", date: "19 Jun", days: 13, tone: "warn" },
+    { event: "FOMC Fed Rate", detail: "Dampak langsung ke IDR & SBN", date: "18 Jun", days: 12, tone: "neg" },
+    { event: "Data Inflasi BPS", detail: "Inflasi Mei 2025", date: "3 Jun", days: 0, tone: "neu", done: true },
+    { event: "Neraca Dagang BPS", detail: "Ekspor / impor April", date: "1 Jul", days: 25, tone: "neu" },
+  ],
+
+  ratings: [
+    { agency: "S&P", grade: "BBB", outlook: "Stabil", action: "Ditegaskan Apr 2025", tone: "neu" },
+    { agency: "Moody's", grade: "Baa2", outlook: "Stabil", action: "Ditegaskan Feb 2025", tone: "neu" },
+    { agency: "Fitch", grade: "BBB", outlook: "Stabil", action: "Pantauan — revisi IMF", tone: "warn" },
+  ],
+
+  precedents: [
+    { html: "Saat <strong>UU Cipta Kerja</strong> disahkan (2020), IHSG sektor pertambangan naik <strong>~6%</strong> dalam 4 minggu setelahnya." },
+    { html: "Larangan ekspor nikel <strong>2020</strong> awalnya menekan ANTM <strong>−4%</strong>, lalu rebound <strong>+18%</strong> dalam 3 bulan saat hilirisasi mulai berjalan." },
+    { html: "Arus keluar asing > Rp 2T dalam 3 hari secara historis diikuti pelemahan IHSG <strong>~1–3%</strong> dalam 1–2 minggu berikutnya." },
+  ],
+
+  geo: [
+    { html: "<strong>Tensi AS–China →</strong> permintaan komoditas China → ekspor RI → IDX Mining. <span style='color:var(--green)'>Saat ini: permintaan naik (positif).</span>" },
+    { html: "<strong>Harga minyak global →</strong> subsidi BBM & inflasi RI → ruang gerak BI. <span style='color:var(--amber)'>Saat ini: netral.</span>" },
+    { html: "<strong>Kebijakan Fed →</strong> selisih suku bunga → arus modal → IDR. <span style='color:var(--red)'>Saat ini: tekanan (negatif).</span>" },
+  ]
+};
+
+/* ---------- helpers ---------- */
+const chgClass = c => c > 0 ? 'up' : c < 0 ? 'dn' : 'flat';
+const chgStr = (c, note) => {
+  if (c === 0) return note ? '— ' + note : '— 0.00%';
+  const arrow = c > 0 ? '▲' : '▼';
+  return arrow + ' ' + Math.abs(c).toFixed(2) + '%';
+};
+const toneColor = t => ({ pos: 'var(--green)', neg: 'var(--red)', warn: 'var(--amber)', neu: 'var(--text-dim)', info: 'var(--blue)' }[t] || 'var(--text-dim)');
+const tagClass = t => ({ pos: 'tag-pos', neg: 'tag-neg', warn: 'tag-warn', neu: 'tag-neu', info: 'tag-info' }[t] || 'tag-neu');
+const sentLabel = s => ({ pos: '+ Positif', neg: '− Negatif', neu: '○ Netral' }[s] || s);
+
+/* ---------- render ---------- */
+function render() {
+  document.getElementById('clock').textContent = DATA.meta.updated;
+  const ms = DATA.meta.marketStatus;
+  const msEl = document.getElementById('market-status');
+  msEl.textContent = ms.label;
+  msEl.className = 'pill ' + tagClass(ms.tone);
+
+  // tickers
+  document.getElementById('tickers').innerHTML = DATA.tickers.map(t => `
+    <div class="tk">
+      <div class="lbl">${t.lbl}</div>
+      <div class="val">${t.val}</div>
+      <div class="chg ${chgClass(t.chg)}">${chgStr(t.chg, t.note)}</div>
+    </div>`).join('');
+
+  // heroes
+  document.getElementById('heroes').innerHTML = DATA.heroes.map(h => {
+    if (h.type === 'uncertainty') {
+      return `<div class="card hero">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Indeks Ketidakpastian</span></div>
+        <div style="display:flex;align-items:flex-end;gap:8px;">
+          <span class="big" style="color:${h.color}">${h.score}</span>
+          <span class="unit" style="padding-bottom:5px;">/100 · ${h.level}</span>
+        </div>
+        <div class="meter"><div class="meter-fill" style="width:${h.score}%;background:linear-gradient(90deg,var(--green),var(--amber) 55%,var(--red))"></div></div>
+        <div class="meter-scale"><span>0 Rendah</span><span>50 Sedang</span><span>100 Tinggi</span></div>
+        <div class="news-impact" style="margin-top:9px;border-top:1px solid var(--border);padding-top:9px;">${h.note}</div>
+      </div>`;
+    }
+    if (h.type === 'outlook') {
+      return `<div class="card hero">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Outlook Pasar</span></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span class="tag ${tagClass(h.tone)}" style="font-size:13px;padding:5px 12px;">${h.stance}</span>
+          <span class="unit">${h.duration}</span>
+        </div>
+        <div class="quote" style="border-color:${toneColor(h.tone)};margin:0;">${h.note}</div>
+      </div>`;
+    }
+    if (h.type === 'flow') {
+      return `<div class="card hero">
+        <div class="card-hd"><span class="card-title"><span class="ic">▣</span>Aliran Dana Asing</span></div>
+        <div class="ff-split">
+          <div class="ff-box" style="background:rgba(234,57,57,0.1)"><div class="lbl" style="color:var(--red)">Net Sell 3 Hari</div><div class="num" style="color:var(--red)">${h.net3d}</div></div>
+          <div class="ff-box" style="background:rgba(240,160,75,0.1)"><div class="lbl" style="color:var(--amber)">Net YTD</div><div class="num" style="color:var(--amber)">${h.ytd}</div></div>
+        </div>
+        <div class="news-impact" style="margin-top:9px;">Paling banyak dijual asing: ${h.topSells}</div>
+      </div>`;
+    }
+  }).join('');
+
+  // news
+  document.getElementById('news-count').textContent = DATA.news.length + ' item';
+  document.getElementById('news').innerHTML = DATA.news.map(n => {
+    const dots = Array.from({length:4}, (_,i) => `<span class="cred-dot ${i < n.cred ? '' : 'off'}"></span>`).join('');
+    return `<div class="news-item">
+      <div class="news-top">
+        <span class="news-title">${n.title}</span>
+        <span class="tag ${tagClass(n.sentiment)}">${sentLabel(n.sentiment)}</span>
+      </div>
+      <div class="news-meta">
+        <span class="news-src">${n.source} · ${n.time}</span>
+        <span class="cred" title="Kredibilitas sumber">${dots}</span>
+        <span class="tag tag-info">${n.sector}</span>
+      </div>
+      <div class="news-impact">${n.impact}</div>
+    </div>`;
+  }).join('');
+
+  // commodities
+  document.getElementById('commodities').innerHTML = DATA.commodities.map(c => `
+    <div class="com-row">
+      <div><div class="com-name">${c.name}</div><div class="com-sub">${c.sub}</div></div>
+      <div class="com-price">${c.price}<span class="com-sub"> ${c.unit}</span></div>
+      <div class="com-chg ${chgClass(c.chg)}">${chgStr(c.chg)}</div>
+    </div>`).join('');
+
+  // sectors
+  const maxAbs = Math.max(...DATA.sectors.map(s => Math.abs(s.chg)));
+  document.getElementById('sectors').innerHTML = DATA.sectors.map(s => {
+    const w = Math.round((Math.abs(s.chg) / maxAbs) * 100);
+    const col = s.chg >= 0 ? 'var(--green)' : 'var(--red)';
+    return `<div class="sec-row">
+      <span class="sec-name">${s.name}</span>
+      <span class="sec-bar"><span class="sec-fill" style="width:${w}%;background:${col}"></span></span>
+      <span class="sec-val ${chgClass(s.chg)}">${s.chg>0?'+':''}${s.chg.toFixed(1)}%</span>
+    </div>`;
+  }).join('');
+
+  // regulations
+  document.getElementById('regulations').innerHTML = DATA.regulations.map(r => `
+    <div class="reg-item">
+      <span class="reg-dot" style="background:${r.dot}"></span>
+      <div>
+        <div class="reg-title">${r.title}</div>
+        <div class="reg-sub">${r.sub}</div>
+        <span class="tag ${tagClass(r.tone)}">${r.status}</span>
+        <span class="tag tag-info">${r.sector}</span>
+      </div>
+    </div>`).join('');
+
+  // calendar
+  document.getElementById('calendar').innerHTML = DATA.calendar.map(c => `
+    <div class="cal-item">
+      <div><div class="cal-event">${c.event}</div><div class="cal-detail">${c.detail}</div></div>
+      <div><div class="cal-date">${c.date}</div><span class="tag ${tagClass(c.done?'neu':c.tone)}" style="float:right">${c.done?'Selesai':c.days+' hari'}</span></div>
+    </div>`).join('');
+
+  // ratings
+  document.getElementById('ratings').innerHTML = DATA.ratings.map(r => `
+    <div class="rate-row">
+      <div><span class="rate-agency">${r.agency}</span> <span class="cal-detail">${r.action}</span></div>
+      <div style="text-align:right"><span class="rate-grade">${r.grade}</span> <span class="tag ${tagClass(r.tone)}">${r.outlook}</span></div>
+    </div>`).join('');
+
+  // precedents & geo
+  document.getElementById('precedents').innerHTML = DATA.precedents.map(p => `<div class="quote">${p.html}</div>`).join('');
+  document.getElementById('geo').innerHTML = DATA.geo.map(g => `<div class="quote">${g.html}</div>`).join('');
+}
+
+render();
+</script>
+</body>
+</html>
