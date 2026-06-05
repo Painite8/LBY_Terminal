@@ -17,23 +17,27 @@ import sys
 import json
 import datetime
 import urllib.request
+import urllib.parse
 import anthropic
 
 # Sonnet for the analysis (more reliable than Haiku on this task). Now that
 # exact prices come from the Stooq feed below, Claude does less number-work,
 # so you can experiment with "claude-haiku-4-5-20251001" again to cut cost.
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "claude-sonnet-4-6"
 DATA_FILE = "data.json"
 
-# ---- Free price feed (Stooq: no API key, automation-friendly) ----------------
-# Maps the dashboard's ticker label -> (Stooq symbol, how to format the value).
-# Only the tickers listed here get overwritten with real data; the rest stay as
-# Claude produced them. If a symbol is wrong or the fetch fails, we keep Claude's
-# value rather than break the dashboard.
+# ---- Free price feed (Yahoo chart API: no API key, clean JSON) ---------------
+# Maps the dashboard's ticker label -> config. Only tickers listed here get
+# overwritten with real data; the rest stay as Claude produced them. If a
+# symbol fails, we keep Claude's value rather than break the dashboard.
+#   fmt:  "comma" -> 7,234   |  "dollar0" -> $2,341
+#   flip: True flips the % sign so a falling rate shows as positive. Used for
+#         IDR/USD so the dashboard goes GREEN when the rupiah strengthens
+#         (a stronger rupiah means USD/IDR falls).
 PRICE_FEED = {
-    "JCI (IHSG)": ("^jkse",   "comma"),    # Jakarta Composite Index
-    "IDR/USD":    ("usdidr",  "comma"),    # rupiah per US dollar
-    "Gold":       ("xauusd",  "dollar0"),  # gold, USD/oz
+    "JCI (IHSG)": {"symbol": "^JKSE", "fmt": "comma",   "flip": False},
+    "IDR/USD":    {"symbol": "IDR=X", "fmt": "comma",   "flip": True},
+    "Gold":       {"symbol": "GC=F",  "fmt": "dollar0", "flip": False},
 }
 
 # ---- The JSON shape the dashboard expects. We give this to Claude verbatim. ----
@@ -159,16 +163,22 @@ REQUIRED_KEYS = ["meta", "tickers", "heroes", "commodities", "sectors",
                  "news", "regulations", "calendar", "ratings", "precedents", "geo"]
 
 
-def parse_stooq_csv(text):
-    """Stooq daily CSV -> (last_close, pct_change). Header: Date,Open,High,Low,Close,Volume."""
-    rows = [r for r in text.strip().splitlines() if r and "," in r]
-    if len(rows) < 3:
-        raise ValueError("not enough rows")
-    last, prev = rows[-1].split(","), rows[-2].split(",")
-    close, pclose = float(last[4]), float(prev[4])
-    if pclose == 0:
+def parse_yahoo_chart(raw):
+    """Yahoo chart JSON -> (last_close, pct_change). Prefers meta fields, falls
+    back to the last two non-null daily closes."""
+    obj = json.loads(raw)
+    res = obj["chart"]["result"][0]
+    meta = res.get("meta", {})
+    last = meta.get("regularMarketPrice")
+    prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+    if last is None or prev is None:
+        closes = [c for c in res["indicators"]["quote"][0]["close"] if c is not None]
+        if len(closes) < 2:
+            raise ValueError("not enough close data")
+        last, prev = closes[-1], closes[-2]
+    if not prev:
         raise ValueError("zero previous close")
-    return close, round((close - pclose) / pclose * 100, 2)
+    return float(last), round((float(last) - float(prev)) / float(prev) * 100, 2)
 
 
 def format_value(num, style):
@@ -181,22 +191,25 @@ def format_value(num, style):
 
 
 def fetch_price(symbol):
-    url = f"https://stooq.com/q/d/l/?s={symbol}&i=d"
+    url = ("https://query1.finance.yahoo.com/v8/finance/chart/"
+           + urllib.parse.quote(symbol) + "?interval=1d&range=5d")
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=25) as r:
-        return parse_stooq_csv(r.read().decode("utf-8", "replace"))
+        return parse_yahoo_chart(r.read().decode("utf-8", "replace"))
 
 
 def apply_price_feed(data):
-    """Overwrite matching tickers with real Stooq data. Never raises; logs and skips on failure."""
+    """Overwrite matching tickers with real feed data. Never raises; logs + skips on failure."""
     by_label = {t.get("lbl"): t for t in data.get("tickers", [])}
-    for label, (symbol, style) in PRICE_FEED.items():
+    for label, cfg in PRICE_FEED.items():
         t = by_label.get(label)
         if not t:
             continue
         try:
-            close, chg = fetch_price(symbol)
-            t["val"], t["chg"] = format_value(close, style), chg
+            close, chg = fetch_price(cfg["symbol"])
+            if cfg.get("flip"):
+                chg = -chg
+            t["val"], t["chg"] = format_value(close, cfg["fmt"]), chg
             print(f"  feed: {label} -> {t['val']} ({chg:+.2f}%)")
         except Exception as e:
             print(f"  feed: {label} failed ({e}); keeping Claude's value", file=sys.stderr)
@@ -204,6 +217,13 @@ def apply_price_feed(data):
 
 
 def main():
+    # Weekday-only: skip Sat/Sun in Jakarta time (markets closed, no need to
+    # spend tokens). The dashboard keeps Friday's data over the weekend.
+    now_wib = datetime.datetime.utcnow() + datetime.timedelta(hours=7)
+    if now_wib.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+        print(f"Weekend in Jakarta ({now_wib:%A}) — skipping update.")
+        sys.exit(0)
+
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
         print("ERROR: ANTHROPIC_API_KEY not set", file=sys.stderr)
