@@ -219,7 +219,7 @@ def apply_price_feed(data):
 def main():
     # Weekday-only: skip Sat/Sun in Jakarta time (markets closed, no need to
     # spend tokens). The dashboard keeps Friday's data over the weekend.
-    now_wib = datetime.datetime.utcnow() + datetime.timedelta(hours=7)
+    now_wib = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=7)
     if now_wib.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
         print(f"Weekend in Jakarta ({now_wib:%A}) — skipping update.")
         sys.exit(0)
