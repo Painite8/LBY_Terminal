@@ -22,7 +22,7 @@ import anthropic
 # Sonnet for the analysis (more reliable than Haiku on this task). Now that
 # exact prices come from the Stooq feed below, Claude does less number-work,
 # so you can experiment with "claude-haiku-4-5-20251001" again to cut cost.
-MODEL = "claude-sonnet-4-6"
+MODEL = "claude-haiku-4-5-20251001"
 DATA_FILE = "data.json"
 
 # ---- Free price feed (Stooq: no API key, automation-friendly) ----------------
